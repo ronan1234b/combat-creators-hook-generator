@@ -4,11 +4,25 @@
 ```
 combat-creators/
 ├── api/
-│   └── generate.js    ← backend, keeps API key secure
-├── index.html         ← the app
-├── logo.png           ← your logo
-└── vercel.json        ← deployment config
+│   ├── generate.js       ← backend, keeps API key secure
+│   └── send-to-slack.js  ← posts scheduled hooks to Slack
+├── index.html            ← the app (Generate + Content Calendar)
+├── logo.png              ← your logo
+└── vercel.json           ← deployment config
 ```
+
+## Content Calendar + Slack
+
+Generated hooks can be added to a Content Calendar (saved in your browser)
+and pushed to a Slack channel with one click.
+
+To enable Slack:
+1. Create a Slack Incoming Webhook for the channel you want hooks posted to
+   (Slack → your workspace → Apps → Incoming Webhooks → Add to Slack).
+2. In Vercel: Settings → Environment Variables
+   - Name: `SLACK_WEBHOOK_URL`
+   - Value: the webhook URL Slack gave you
+3. Save → Deployments → Redeploy
 
 ## Deploy to Vercel (5 minutes)
 

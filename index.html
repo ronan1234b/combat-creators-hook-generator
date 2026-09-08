@@ -56,6 +56,29 @@
       margin-top: 6px;
     }
 
+    .nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      color: var(--gray-6);
+      border: 0.5px solid #333;
+      border-radius: 8px;
+      padding: 8px 20px;
+      font-size: 0.75rem;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+
+    .nav-btn:hover { color: var(--white); border-color: var(--gray-6); }
+    .nav-btn.active { background: var(--white); color: var(--black); border-color: var(--white); }
+
     main {
       max-width: 680px;
       margin: 0 auto;
@@ -275,6 +298,105 @@
     .copy-btn:hover { background: var(--gray-3); border-color: var(--gray-6); }
     .copy-btn.copied { color: var(--green); border-color: var(--green); background: #0d1f0d; }
 
+    .card-actions { display: flex; gap: 10px; margin-top: 0.75rem; }
+    .card-actions .copy-btn { margin-top: 0; }
+
+    .schedule-row {
+      display: none;
+      gap: 10px;
+      margin-top: 0.75rem;
+      align-items: center;
+    }
+    .schedule-row.open { display: flex; }
+
+    .schedule-row input[type="date"] {
+      flex: 1;
+      background: var(--black);
+      color: var(--white);
+      border: 0.5px solid #333;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+    }
+
+    .schedule-confirm-btn {
+      background: var(--green);
+      color: var(--black);
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.78rem;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .calendar-empty {
+      text-align: center;
+      color: var(--gray-6);
+      font-size: 0.9rem;
+      padding: 3rem 1rem;
+    }
+
+    .calendar-group { margin-bottom: 1.75rem; }
+
+    .calendar-date {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--gray-7);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 0.5px solid #222;
+    }
+
+    .cal-card {
+      background: var(--gray-1);
+      border: 0.5px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cal-card .hook-text { font-size: 1.4rem; margin-bottom: 0.75rem; }
+
+    .cal-actions { display: flex; gap: 10px; }
+
+    .slack-btn {
+      flex: 1;
+      background: #4a154b;
+      color: var(--white);
+      border: 2px solid #4a154b;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .slack-btn:hover { background: #611f63; }
+    .slack-btn:disabled { background: var(--gray-3); border-color: var(--gray-3); color: var(--gray-5); cursor: not-allowed; }
+    .slack-btn.sent { background: var(--green); border-color: var(--green); color: var(--black); }
+
+    .remove-btn {
+      background: transparent;
+      color: var(--gray-6);
+      border: 0.5px solid var(--gray-4);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .remove-btn:hover { color: var(--red); border-color: var(--red); }
+
     .reset-btn {
       display: block;
       margin: 2rem auto 0;
@@ -314,25 +436,34 @@
     <img src="/logo.png" alt="Combat Creators" class="logo" onerror="this.style.display='none'" />
     <div class="brand">Combat Creators</div>
     <div class="tagline">On-Screen Text Hook Generator</div>
+    <div class="nav">
+      <button class="nav-btn active" id="nav-generate" onclick="showView('generate')">Generate</button>
+      <button class="nav-btn" id="nav-calendar" onclick="showView('calendar')">Content Calendar</button>
+    </div>
   </header>
 
   <main>
-    <div id="input-section">
-      <label class="input-label">Paste your script or describe your video idea</label>
-      <textarea id="user-input" placeholder="Paste your full video script here... or describe your idea (e.g. 'a video about why most creators fail at growing on Instagram')"></textarea>
-      <button class="generate-btn" id="generate-btn" onclick="handleGenerate()">Generate My Hooks</button>
-      <div class="status" id="status"></div>
-      <div class="error-msg" id="error"></div>
+    <div id="generate-view">
+      <div id="input-section">
+        <label class="input-label">Paste your script or describe your video idea</label>
+        <textarea id="user-input" placeholder="Paste your full video script here... or describe your idea (e.g. 'a video about why most creators fail at growing on Instagram')"></textarea>
+        <button class="generate-btn" id="generate-btn" onclick="handleGenerate()">Generate My Hooks</button>
+        <div class="status" id="status"></div>
+        <div class="error-msg" id="error"></div>
+      </div>
+
+      <div id="clarify-section" style="display:none;"></div>
+      <div id="hooks-section" style="display:none;"></div>
     </div>
 
-    <div id="clarify-section" style="display:none;"></div>
-    <div id="hooks-section" style="display:none;"></div>
+    <div id="calendar-view" style="display:none;"></div>
   </main>
 
   <footer>&copy; Combat Creators &mdash; Powered by AI</footer>
 
   <script>
     let conversationHistory = [];
+    let currentHooks = [];
 
     function setStatus(msg) { document.getElementById('status').textContent = msg; }
     function setError(msg) { document.getElementById('error').textContent = msg; }
@@ -415,27 +546,168 @@
     }
 
     function renderHooks(hooks) {
+      currentHooks = hooks || [];
       const sec = document.getElementById('hooks-section');
       sec.style.display = 'block';
       document.getElementById('clarify-section').style.display = 'none';
       document.getElementById('input-section').style.display = 'none';
 
       let html = '<div class="hooks-header">Your On-Screen Text Hooks</div>';
-      (hooks || []).forEach((hook, i) => {
+      currentHooks.forEach((hook, i) => {
         const safeText = (hook.text || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         html += '<div class="hook-card">';
-        html += '<div class="hook-num">Hook ' + (i + 1) + ' of ' + hooks.length + '</div>';
+        html += '<div class="hook-num">Hook ' + (i + 1) + ' of ' + currentHooks.length + '</div>';
         html += '<div class="hook-text">' + (hook.text || '') + '</div>';
         html += '<div class="hook-meta">';
         html += '<div class="meta-row"><span class="meta-label">Why</span><span class="meta-value">' + (hook.why || '') + '</span></div>';
         html += '<div class="meta-row"><span class="meta-label">Format</span><span class="meta-value">' + (hook.formatting || '') + '</span></div>';
         html += '</div>';
+        html += '<div class="card-actions">';
         html += '<button class="copy-btn" onclick="copyHook(this, \'' + safeText + '\')">Copy Hook</button>';
+        html += '<button class="copy-btn" onclick="toggleSchedule(' + i + ')">Add to Calendar</button>';
+        html += '</div>';
+        html += '<div class="schedule-row" id="schedule-row-' + i + '">';
+        html += '<input type="date" id="schedule-date-' + i + '" />';
+        html += '<button class="schedule-confirm-btn" onclick="addToCalendar(' + i + ')">Save</button>';
+        html += '</div>';
         html += '</div>';
       });
 
       html += '<button class="reset-btn" onclick="resetApp()">Generate New Hooks</button>';
       sec.innerHTML = html;
+    }
+
+    function toggleSchedule(i) {
+      const row = document.getElementById('schedule-row-' + i);
+      row.classList.toggle('open');
+      if (row.classList.contains('open')) {
+        const dateInput = document.getElementById('schedule-date-' + i);
+        if (!dateInput.value) dateInput.value = new Date().toISOString().slice(0, 10);
+      }
+    }
+
+    function addToCalendar(i) {
+      const hook = currentHooks[i];
+      const date = document.getElementById('schedule-date-' + i).value;
+      if (!date) return;
+
+      const calendar = loadCalendar();
+      calendar.push({
+        id: Date.now() + '-' + i,
+        date,
+        hookText: hook.text || '',
+        why: hook.why || '',
+        formatting: hook.formatting || '',
+        sentToSlack: false
+      });
+      saveCalendar(calendar);
+
+      document.getElementById('schedule-row-' + i).classList.remove('open');
+      setStatus('Added to your content calendar.');
+      setTimeout(() => setStatus(''), 2000);
+    }
+
+    function loadCalendar() {
+      try {
+        return JSON.parse(localStorage.getItem('ccCalendar') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveCalendar(calendar) {
+      localStorage.setItem('ccCalendar', JSON.stringify(calendar));
+    }
+
+    function showView(view) {
+      const isGenerate = view === 'generate';
+      document.getElementById('generate-view').style.display = isGenerate ? 'block' : 'none';
+      document.getElementById('calendar-view').style.display = isGenerate ? 'none' : 'block';
+      document.getElementById('nav-generate').classList.toggle('active', isGenerate);
+      document.getElementById('nav-calendar').classList.toggle('active', !isGenerate);
+      if (!isGenerate) renderCalendar();
+    }
+
+    function renderCalendar() {
+      const view = document.getElementById('calendar-view');
+      const calendar = loadCalendar().sort((a, b) => a.date.localeCompare(b.date));
+
+      if (!calendar.length) {
+        view.innerHTML = '<div class="calendar-empty">No hooks scheduled yet. Generate some hooks and click "Add to Calendar" to plan your content.</div>';
+        return;
+      }
+
+      const groups = {};
+      calendar.forEach(entry => {
+        if (!groups[entry.date]) groups[entry.date] = [];
+        groups[entry.date].push(entry);
+      });
+
+      let html = '';
+      Object.keys(groups).sort().forEach(date => {
+        html += '<div class="calendar-group">';
+        html += '<div class="calendar-date">' + formatDate(date) + '</div>';
+        groups[date].forEach(entry => {
+          html += '<div class="cal-card">';
+          html += '<div class="hook-text">' + entry.hookText + '</div>';
+          html += '<div class="cal-actions">';
+          html += '<button class="slack-btn' + (entry.sentToSlack ? ' sent' : '') + '" id="slack-btn-' + entry.id + '" onclick="sendToSlack(\'' + entry.id + '\')">' + (entry.sentToSlack ? 'Sent to Slack' : 'Send to Slack') + '</button>';
+          html += '<button class="remove-btn" onclick="removeFromCalendar(\'' + entry.id + '\')">Remove</button>';
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      });
+
+      view.innerHTML = html;
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function removeFromCalendar(id) {
+      const calendar = loadCalendar().filter(entry => entry.id !== id);
+      saveCalendar(calendar);
+      renderCalendar();
+    }
+
+    async function sendToSlack(id) {
+      const calendar = loadCalendar();
+      const entry = calendar.find(e => e.id === id);
+      if (!entry) return;
+
+      const btn = document.getElementById('slack-btn-' + id);
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/send-to-slack', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: formatDate(entry.date),
+            hookText: entry.hookText,
+            why: entry.why,
+            formatting: entry.formatting
+          })
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: 'Server error ' + res.status }));
+          throw new Error(err.error || 'Error ' + res.status);
+        }
+
+        entry.sentToSlack = true;
+        saveCalendar(calendar);
+        btn.textContent = 'Sent to Slack';
+        btn.classList.add('sent');
+      } catch (e) {
+        btn.textContent = 'Send to Slack';
+        setError('Slack send failed: ' + e.message);
+      }
+
+      btn.disabled = false;
     }
 
     function copyHook(btn, text) {
